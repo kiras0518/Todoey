@@ -15,6 +15,7 @@
 		7D4DAD6C21B7A0360082E606 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4DAD6B21B7A0360082E606 /* CategoryViewController.swift */; };
 		7DB8572E21BFF73200993D8B /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB8572D21BFF73200993D8B /* Item.swift */; };
 		7DB8573021BFF74500993D8B /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB8572F21BFF74500993D8B /* Category.swift */; };
+		7DB8573221C25D4000993D8B /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB8573121C25D4000993D8B /* SwipeTableViewController.swift */; };
 		BCFFFC019CF4C65E79F14381 /* Pods_Todoey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7EE5337E70B5BEB9596E49A /* Pods_Todoey.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 		7D4DAD6B21B7A0360082E606 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		7DB8572D21BFF73200993D8B /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		7DB8572F21BFF74500993D8B /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		7DB8573121C25D4000993D8B /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		8569FD681B06C7DBC3D246B0 /* Pods-Todoey.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todoey.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Todoey/Pods-Todoey.debug.xcconfig"; sourceTree = "<group>"; };
 		B7EE5337E70B5BEB9596E49A /* Pods_Todoey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Todoey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C165F3CD8E14DE058FE42EF7 /* Pods-Todoey.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todoey.release.xcconfig"; path = "Pods/Target Support Files/Pods-Todoey/Pods-Todoey.release.xcconfig"; sourceTree = "<group>"; };
@@ -97,8 +99,8 @@
 		7D4DAD4321AD77990082E606 /* Date Model */ = {
 			isa = PBXGroup;
 			children = (
-				7DB8572D21BFF73200993D8B /* Item.swift */,
 				7DB8572F21BFF74500993D8B /* Category.swift */,
+				7DB8572D21BFF73200993D8B /* Item.swift */,
 			);
 			path = "Date Model";
 			sourceTree = "<group>";
@@ -108,6 +110,7 @@
 			children = (
 				7D4DAD6B21B7A0360082E606 /* CategoryViewController.swift */,
 				7D4DAD3121ABD81E0082E606 /* TodoListViewController.swift */,
+				7DB8573121C25D4000993D8B /* SwipeTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -229,15 +232,19 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Todoey/Pods-Todoey-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -255,6 +262,7 @@
 				7D4DAD6C21B7A0360082E606 /* CategoryViewController.swift in Sources */,
 				7D4DAD3221ABD81E0082E606 /* TodoListViewController.swift in Sources */,
 				7D4DAD3021ABD81E0082E606 /* AppDelegate.swift in Sources */,
+				7DB8573221C25D4000993D8B /* SwipeTableViewController.swift in Sources */,
 				7DB8573021BFF74500993D8B /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

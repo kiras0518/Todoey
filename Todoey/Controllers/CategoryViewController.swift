@@ -8,8 +8,10 @@
 
 import UIKit
 import RealmSwift
+import SwipeCellKit
+import ChameleonFramework
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeTableViewController {
 
     let realm = try! Realm()
     
@@ -21,6 +23,8 @@ class CategoryViewController: UITableViewController {
         super.viewDidLoad()
         
         loadCategories()
+        
+        tableView.separatorStyle = .none
     }
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -32,7 +36,7 @@ class CategoryViewController: UITableViewController {
             
             let newCategory = Category()
             newCategory.name = textField.text!
-            
+            newCategory.colour = UIColor.randomFlat.hexValue()
             //self.cateArray.append(newCategory)
             
             self.save(category: newCategory)
@@ -57,9 +61,11 @@ class CategoryViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         cell.textLabel?.text = cateArray?[indexPath.row].name ?? "No Categories"
+        
+        cell.backgroundColor = UIColor(hexString: cateArray?[indexPath.row].colour ?? "1D9BF6")
         
         return cell
     }
@@ -68,6 +74,7 @@ class CategoryViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToItems", sender: self)
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let destinationVC = segue.destination as! TodoListViewController
@@ -84,7 +91,7 @@ class CategoryViewController: UITableViewController {
                 realm.add(category)
             }
         } catch {
-            print(error)
+            print("Error saving category \(error)")
         }
         self.tableView.reloadData()
     }
@@ -92,14 +99,24 @@ class CategoryViewController: UITableViewController {
     func loadCategories(){
         
         cateArray = realm.objects(Category.self)
-        
-//        let request : NSFetchRequest<Categroy> = Categroy.fetchRequest()
-//        do {
-//            cateArray = try context.fetch(request)
-//        } catch {
-//            print("Error fetching data form context \(error)")
-//        }
+
         tableView.reloadData()
+    }
+    
+    //MARK Delete Data From Swipe
+    override func updateModel(at indexPath: IndexPath) {
+        
+        //super.updateModel(at: indexPath)
+        
+        if let categroyForDeletion = self.cateArray?[indexPath.row]{
+            do {
+                try self.realm.write {
+                    self.realm.delete(categroyForDeletion)
+                }
+            } catch {
+                print("Error deleting cateArray, \(error)")
+            }
+        }
     }
     
 }

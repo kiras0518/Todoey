@@ -8,11 +8,12 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeTableViewController {
     
     var itemArray : Results<Item>?
-    let relam = try! Realm()
+    let realm = try! Realm()
     
     var selectedCategory : Category? {
         didSet{
@@ -20,7 +21,7 @@ class TodoListViewController: UITableViewController {
         }
     }
  
-     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+     //let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,44 +36,62 @@ class TodoListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //print("cellForRowAtIndexPath Call")
-        //let cell = UITableViewCell(style: .default, reuseIdentifier: "ToDoItemCell")
+
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
-       
         if let item = itemArray?[indexPath.row] {
+            
             cell.textLabel?.text = item.title
+            
+            if let colour = UIColor(hexString: selectedCategory!.colour)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(itemArray!.count)) {
+                cell.backgroundColor = colour
+                cell.textLabel?.textColor = ContrastColorOf(colour, returnFlat: true)
+            }
+            
+//            print("version 1: \(CGFloat(indexPath.row / itemArray!.count))")
+//            print("version 2: \(CGFloat(indexPath.row) / CGFloat(itemArray!.count))")
+           
             //value = condition ? valueIfTure : valeuIfFalse
             cell.accessoryType = item.done ? .checkmark : .none
         } else {
             cell.textLabel?.text = "No Items Added"
         }
-
-//        if item.done == true {
-//            cell.accessoryType = .checkmark
-//        } else {
-//            cell.accessoryType = .none
-//        }
         
         return cell
         
     }
 
+//    //Inserting or Deleting Table Rows
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            if let category = itemArray?[indexPath.row] {
+//                do {
+//                    try relam.write {
+//                        relam.delete(category)
+//                    }
+//                } catch {
+//                    print(error)
+//                }
+//            }
+//            tableView.reloadData()
+//        }
+//    }
+    
     //TableView Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let item = itemArray?[indexPath.row] {
             do {
-            try relam.write {
-                //relam.delete(item)
-                item.done = !item.done
+                try realm.write {
+                    item.done = !item.done
                 }
             } catch {
                 print("Error saving done status, \(error)")
             }
         }
         tableView.reloadData()
-
+        
+        tableView.deselectRow(at: indexPath, animated: true)
 //        if item[indexPath.row].done == false {
 //            item[indexPath.row].done = true
 //        } else {
@@ -84,7 +103,7 @@ class TodoListViewController: UITableViewController {
 //        } else {
 //             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
 //        }
-        tableView.deselectRow(at: indexPath, animated: true)
+       
         
     }
 
@@ -100,7 +119,7 @@ class TodoListViewController: UITableViewController {
 
             if let currentCategory = self.selectedCategory {
                 do {
-                    try self.relam.write {
+                    try self.realm.write {
                         let newItem = Item()
                         newItem.title = textfield.text!
                         newItem.dateCreated = Date()
@@ -128,15 +147,7 @@ class TodoListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
-//    func saveItems() {
-//        do {
-//            try context.save()
-//        } catch {
-//            print("Error saving context \(error)")
-//        }
-//        self.tableView.reloadData()
-//    }
-    
+    //MARK - Model Manupulation Methods
     func loadItems() {
 
         itemArray = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
@@ -144,7 +155,17 @@ class TodoListViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    
+    override func updateModel(at indexPath: IndexPath) {
+        if let item = itemArray?[indexPath.row] {
+            do {
+                try realm.write {
+                    realm.delete(item)
+                }
+            } catch {
+                print("Error deleting Item, \(error)")
+            }
+        }
+    }
     
 }
 
@@ -153,6 +174,7 @@ class TodoListViewController: UITableViewController {
 extension TodoListViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
         itemArray = itemArray?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
         
         tableView.reloadData()
