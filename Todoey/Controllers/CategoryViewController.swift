@@ -38,7 +38,6 @@ class CategoryViewController: SwipeTableViewController {
             newCategory.name = textField.text!
             newCategory.colour = UIColor.randomFlat.hexValue()
             //self.cateArray.append(newCategory)
-            
             self.save(category: newCategory)
             
         }
@@ -63,9 +62,16 @@ class CategoryViewController: SwipeTableViewController {
         
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
-        cell.textLabel?.text = cateArray?[indexPath.row].name ?? "No Categories"
-        
-        cell.backgroundColor = UIColor(hexString: cateArray?[indexPath.row].colour ?? "1D9BF6")
+        if let category = cateArray?[indexPath.row] {
+            
+            //cell.textLabel?.text = cateArray?[indexPath.row].name ?? "No Categories"
+            cell.textLabel?.text = category.name
+            //cell.backgroundColor = UIColor(hexString: cateArray?[indexPath.row].colour ?? "1D9BF6")
+            guard let categoryColur = UIColor(hexString: category.colour) else {fatalError()}
+            cell.backgroundColor = categoryColur
+            cell.textLabel?.textColor = ContrastColorOf(categoryColur, returnFlat: true)
+            
+        }
         
         return cell
     }

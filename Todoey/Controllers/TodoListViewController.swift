@@ -15,6 +15,7 @@ class TodoListViewController: SwipeTableViewController {
     var itemArray : Results<Item>?
     let realm = try! Realm()
     
+    @IBOutlet weak var searchBar: UISearchBar!
     var selectedCategory : Category? {
         didSet{
             loadItems()
@@ -26,8 +27,39 @@ class TodoListViewController: SwipeTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-
+        //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+ 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        title = selectedCategory!.name
+        guard let colourHex = selectedCategory?.colour else {fatalError()}
+            //navigationController?.navigationBar.barTintColor = UIColor(hexString: selectedCategory!.colour)
+        updateNavBar(withHexCode: colourHex)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+//        guard let originalColour = UIColor(hexString: "1D9BF6") else {
+//            fatalError()}
+//        navigationController?.navigationBar.barTintColor = originalColour
+//        navigationController?.navigationBar.tintColor = FlatWhite()
+//        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: FlatWhite()]
+        updateNavBar(withHexCode: "1D9BF6")
+    }
+    
+    //Navbar Setup Methods
+    func updateNavBar(withHexCode colourHexCode: String) {
+        
+        guard let navBar = navigationController?.navigationBar else {
+            fatalError("navigationController dose not exist")}
+        
+        guard let navBarColour = UIColor(hexString: colourHexCode) else { fatalError()}
+        
+        navBar.barTintColor = navBarColour
+        navBar.tintColor = ContrastColorOf(navBarColour, returnFlat: true)
+        
+        navBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : ContrastColorOf(navBarColour, returnFlat: true)]
+        searchBar.barTintColor = navBarColour
     }
     
     //TableView Datasource Methods
@@ -48,8 +80,8 @@ class TodoListViewController: SwipeTableViewController {
                 cell.textLabel?.textColor = ContrastColorOf(colour, returnFlat: true)
             }
             
-//            print("version 1: \(CGFloat(indexPath.row / itemArray!.count))")
-//            print("version 2: \(CGFloat(indexPath.row) / CGFloat(itemArray!.count))")
+            //print("version 1: \(CGFloat(indexPath.row / itemArray!.count))")
+            //print("version 2: \(CGFloat(indexPath.row) / CGFloat(itemArray!.count))")
            
             //value = condition ? valueIfTure : valeuIfFalse
             cell.accessoryType = item.done ? .checkmark : .none
@@ -109,7 +141,7 @@ class TodoListViewController: SwipeTableViewController {
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
-        var textfield = UITextField()
+        var textfield = UITextField()//textField在最上面才能在action時讀取到addTextField.text
 
         let alert = UIAlertController(title: "Add New", message: "Hello", preferredStyle: .alert)
         
@@ -142,6 +174,7 @@ class TodoListViewController: SwipeTableViewController {
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Create new item"
             textfield = alertTextField
+            //最上面的textField=alertTextField讓action讀取到self.itemArray.append(textField.text!)存在array
         }
         alert.addAction(action)
         present(alert, animated: true, completion: nil)

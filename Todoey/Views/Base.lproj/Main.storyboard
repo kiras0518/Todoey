@@ -40,14 +40,16 @@
                             <outlet property="delegate" destination="E3G-ek-Flm" id="4hC-Et-fbf"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Items" id="RPd-vB-j6b">
+                    <navigationItem key="navigationItem" title="Items" largeTitleDisplayMode="always" id="RPd-vB-j6b">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="q9s-1m-9DX">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <action selector="addButtonPressed:" destination="E3G-ek-Flm" id="ceu-fg-TRy"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="searchBar" destination="TFt-pl-MtW" id="yN7-hq-zi0"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Ef-kq-wFz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
