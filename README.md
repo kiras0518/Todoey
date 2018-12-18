@@ -1,9 +1,20 @@
 # Todoey
 
-待辦事項
-練習使用Realm
+### 學習目標
+- 在 Udemy 上的教學來完成 TableView 以及 Realm 的練習
+- 使用 Realm 讓資料儲存在本地裝置
+- 透過 SwipeCellKit 讓 TableView Cell 有滑動編輯的效果
+- 使用 ChameleonFramework 的顏色來設計畫面
 
-## Pod
-- RealmSwift
+---
+
+### 使用到的第三方函式
+
 - SwipeCellKit
-- ChameleonFramework/Swift
+- RealmSwift
+- ChameleonFramework
+
+### 未完成
+
+- 需再增加 編輯 功能
+- 使用者設定
