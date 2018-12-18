@@ -18,9 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         print("didFinishLaunchingWithOptions")
         
-        //print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last! as String)
-        print(Realm.Configuration.defaultConfiguration.fileURL)
-        
+        //print(Realm.Configuration.defaultConfiguration.fileURL)
+        //找到realm儲存的地方
         do {
             _ = try Realm()
         } catch {
@@ -38,6 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
        
         print("applicationDidEnterBackground")
+        //切換別App，App還在背景運作
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

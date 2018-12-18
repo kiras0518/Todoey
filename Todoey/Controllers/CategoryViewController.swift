@@ -66,7 +66,6 @@ class CategoryViewController: SwipeTableViewController {
             
             //cell.textLabel?.text = cateArray?[indexPath.row].name ?? "No Categories"
             cell.textLabel?.text = category.name
-            //cell.backgroundColor = UIColor(hexString: cateArray?[indexPath.row].colour ?? "1D9BF6")
             guard let categoryColur = UIColor(hexString: category.colour) else {fatalError()}
             cell.backgroundColor = categoryColur
             cell.textLabel?.textColor = ContrastColorOf(categoryColur, returnFlat: true)
@@ -103,17 +102,13 @@ class CategoryViewController: SwipeTableViewController {
     }
     
     func loadCategories(){
-        
         cateArray = realm.objects(Category.self)
-
         tableView.reloadData()
     }
     
     //MARK Delete Data From Swipe
     override func updateModel(at indexPath: IndexPath) {
-        
         //super.updateModel(at: indexPath)
-        
         if let categroyForDeletion = self.cateArray?[indexPath.row]{
             do {
                 try self.realm.write {
@@ -122,6 +117,43 @@ class CategoryViewController: SwipeTableViewController {
             } catch {
                 print("Error deleting cateArray, \(error)")
             }
+        }
+    }
+    
+    override func editModel(at indexPath: IndexPath) {
+        if let categoryForEdit = self.cateArray?[indexPath.row].name{
+            var editText = UITextField()
+            
+            let alert = UIAlertController(title: "Edit", message: "Change the name of this Category", preferredStyle: .alert)
+            alert.addTextField { (textField) in
+                textField.text = categoryForEdit
+                editText = textField
+            }
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            
+            let saveAction = UIAlertAction(title: "Save", style: .default) { (saveAction) in
+                if editText.text != nil {
+                    
+                    do{
+                        try self.realm.write {
+                            self.cateArray?[indexPath.row].name = editText.text!
+                        }
+                    }catch{
+                        print("Error editing Category \(error)")
+                    }
+                    self.tableView.reloadData()
+                }else{
+                    let blankAlert = UIAlertController(title: "Need some text to change title", message: "", preferredStyle: .actionSheet)
+                    let gotItAction = UIAlertAction(title: "Got it", style: .default, handler: { (gotItAction) in
+                        self.present(alert,animated: true,completion: nil)
+                    })
+                    blankAlert.addAction(gotItAction)
+                    self.present(blankAlert,animated: true,completion: nil)
+                }
+            }
+            alert.addAction(saveAction)
+            
+            present(alert, animated: true, completion: nil)      
         }
     }
     

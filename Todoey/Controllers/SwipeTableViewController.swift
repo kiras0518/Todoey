@@ -33,15 +33,19 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
             // handle action by updating model with deletion
             print("Delete cell")
-            
             self.updateModel(at: indexPath)
-            
+        }
+        
+        let editAction = SwipeAction(style: .default, title: "Edit") { action, indexPath in
+            // handle action by updating model with deletion
+            print("Edit cell")
+            self.editModel(at: indexPath)
         }
         
         // customize the action appearance
         deleteAction.image = UIImage(named: "delete-icon")
-        
-        return [deleteAction]
+        editAction.image = UIImage(named: "edit1")
+        return [deleteAction,editAction]
     }
     
 //    func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
@@ -54,6 +58,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
         var options = SwipeTableOptions()
         options.expansionStyle = .destructive
+        
         return options
     }
     
@@ -62,4 +67,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         print("Item deleted form superclass")
     }
 
+    func editModel(at indexPath: IndexPath){
+        //print("func editModel(at indexPath: IndexPath)")
+    }
 }

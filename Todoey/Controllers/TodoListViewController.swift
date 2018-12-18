@@ -200,6 +200,41 @@ class TodoListViewController: SwipeTableViewController {
         }
     }
     
+    override func editModel(at indexPath: IndexPath) {
+        if let categoryForEdit = self.itemArray?[indexPath.row].title{
+            var editText = UITextField()
+            
+            let alert = UIAlertController(title: "Edit", message: "Change the name of this Category", preferredStyle: .alert)
+            alert.addTextField { (textField) in
+                textField.text = categoryForEdit
+                editText = textField
+            }
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            
+            let saveAction = UIAlertAction(title: "Save", style: .default) { (saveAction) in
+                if editText.text != nil {
+                    
+                    do{
+                        try self.realm.write {
+                            self.itemArray?[indexPath.row].title = editText.text!
+                        }
+                    }catch{
+                        print("Error editing Category \(error)")
+                    }
+                    self.tableView.reloadData()
+                }else{
+                    let blankAlert = UIAlertController(title: "Need some text to change title", message: "", preferredStyle: .actionSheet)
+                    let gotItAction = UIAlertAction(title: "Got it", style: .default, handler: { (gotItAction) in
+                        self.present(alert,animated: true,completion: nil)
+                    })
+                    blankAlert.addAction(gotItAction)
+                    self.present(blankAlert,animated: true,completion: nil)
+                }
+            }
+            alert.addAction(saveAction)
+            present(alert, animated: true, completion: nil)
+        }
+    }
 }
 
 
