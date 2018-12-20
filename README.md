@@ -1,4 +1,6 @@
 # Todoey
+![圖](https://i.imgur.com/siTrQ3N.gif)
+
 
 ### 學習目標
 - 在 Udemy 上的教學來完成 TableView 以及 Realm 的練習
